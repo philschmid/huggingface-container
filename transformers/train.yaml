@@ -1,0 +1,16 @@
+name: transformers-training
+
+channels:
+  - conda-forge
+  - nvidia
+  - pytorch
+
+dependencies:
+  - python=3.8
+  - nvidia::cudatoolkit=11.3
+  - pytorch::pytorch=1.11.0
+  - tensorboard
+  - mpi4py=3.0 # installs cuda-aware openmpi
+  - pip:
+    # - git+https://github.com/blaze/dask.git#egg=dask[complete]
+    - transformers[sklearn,sentencepiece,audio,vision]==4.20.1
