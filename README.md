@@ -31,10 +31,18 @@ https://carpentries-incubator.github.io/introduction-to-conda-for-data-scientist
 
 ## Build example
 
+### buildx
+
 ```bash
 docker buildx build \
     --platform=linux/amd64 \
     --output ./build \
     --file base/Dockerfile.cpu \
     .
+```
+
+### build
+
+```bash
+docker build -t test -f base/Dockerfile.cpu .
 ```

@@ -1,1 +1,35 @@
+FROM nvidia/cuda:11.7.0-devel-ubuntu22.04
+# FROM nvidia/cuda:11.6.1-devel-ubuntu20.04
 
+WORKDIR /app
+
+
+RUN apt-get update \
+    && apt-get -y upgrade --only-upgrade systemd openssl cryptsetup \
+    && apt-get install -y \
+    bzip2 \
+    curl \
+    wget \
+    git \
+    git-lfs \
+    tar \
+    # audio
+    libsndfile1-dev \
+    ffmpeg \
+    # install micromamba
+    && wget -qO-  https://micromamba.snakepit.net/api/micromamba/linux-64/latest | tar -xvj bin/micromamba \
+    && touch /root/.bashrc \
+    && ./bin/micromamba shell init -s bash -p /opt/conda  \
+    && grep -v '[ -z "\$PS1" ] && return' /root/.bashrc  > /opt/conda/bashrc   # this line has been modified \
+    && apt-get clean autoremove --yes \
+    && rm -rf /var/lib/{apt,dpkg,cache,log}
+
+RUN micromamba activate 
+
+RUN micromamba install -y -n base -c conda-forge \
+       pyopenssl=20.0.1 \
+       python=${PYTHON_VERSION} \
+       requests=2.25.1 && \
+    micromamba clean --all --yes
+
+ENTRYPOINT [ "python3" ]
