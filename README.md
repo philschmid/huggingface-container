@@ -46,3 +46,11 @@ docker buildx build \
 ```bash
 docker build -t test -f base/Dockerfile.cpu .
 ```
+
+
+# TODO 
+
+* Copy logic from https://github.com/anibali/docker-pytorch with giving him credits
+* create templates 
+* create manager.py 
+* folders for transformers, optimum, custom 
