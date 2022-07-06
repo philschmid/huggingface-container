@@ -4,13 +4,10 @@ LABEL maintainer="Hugging Face"
 LABEL version="4.20.1"
 
 ENV DEBIAN_FRONTEND=noninteractive
-
-
 ARG CONDA_FILE=env.yaml
 ARG PYTHON_VERSION=3.9.1
-# create user
 
-WORKDIR /app
+# TODO use ubuntu user
 
 
 RUN apt-get update \
@@ -18,40 +15,31 @@ RUN apt-get update \
     && apt-get install -y \
     bzip2 \
     curl \
-    wget \
     git \
     git-lfs \
     tar \
     # audio
     libsndfile1-dev \
     ffmpeg \
-    # install micromamba
-    && wget -qO-  https://micromamba.snakepit.net/api/micromamba/linux-64/latest | tar -xvj bin/micromamba \
-    && touch /root/.bashrc \
-    && ./bin/micromamba shell init -s bash -p /opt/conda  \
-    && grep -v '[ -z "\$PS1" ] && return' /root/.bashrc  > /opt/conda/bashrc   # this line has been modified \
     && apt-get clean autoremove --yes \
     && rm -rf /var/lib/{apt,dpkg,cache,log}
 
+# install micromamba
+ENV MAMBA_ROOT_PREFIX=/opt/conda
+ENV PATH=/opt/conda/bin:$PATH
+RUN curl -L https://micromamba.snakepit.net/api/micromamba/linux-64/latest | tar -xj "bin/micromamba" \
+    && touch /root/.bashrc \
+    && ./bin/micromamba shell init -s bash -p /opt/conda  \
+    && grep -v '[ -z "\$PS1" ] && return' /root/.bashrc  > /opt/conda/bashrc
 
-# RUN adduser -D myuser && chown -R myuser /myapp-data
-# ... copy application files
-# USER myuser
+WORKDIR /app
 
-# have to change user
-# COPY --chown=$MAMBA_USER:$MAMBA_USER ${CONDA_FILE} /tmp/env.yaml
-
-# install dependencies
-# env-less example https://github.com/mamba-org/micromamba-docker/blob/main/examples/cmdline_spec/Dockerfile
-# RUN micromamba install -y -n base -f /tmp/env.yaml && \
-#     micromamba clean --all --yes
-
-RUN micromamba activate 
-
+# install python dependencies
 RUN micromamba install -y -n base -c conda-forge \
        pyopenssl=20.0.1 \
-       python=${PYTHON_VERSION} \
+       python=$PYTHON_VERSION \
        requests=2.25.1 && \
     micromamba clean --all --yes
+
 
 ENTRYPOINT [ "python3" ]
