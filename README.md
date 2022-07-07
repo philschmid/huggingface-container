@@ -54,3 +54,8 @@ docker build -t test -f base/Dockerfile.cpu .
 * create templates 
 * create manager.py 
 * folders for transformers, optimum, custom 
+
+
+# Conda packages
+
+* [pytorch](https://anaconda.org/pytorch/pytorch/files)

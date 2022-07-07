@@ -1,7 +1,0 @@
-name: transformers-training
-
-dependencies:
-  - python=3.8
-  - pip:
-    # - git+https://github.com/blaze/dask.git#egg=dask[complete]
-    - transformers[sklearn,sentencepiece,audio,vision]==4.20.1

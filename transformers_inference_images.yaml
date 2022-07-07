@@ -1,0 +1,15 @@
+4.20.1-pt1.11-cuda11.6:
+  extra_tags:
+    - "4.20.1"
+    - latest
+  template:
+    template_path: templates/Dockerfile.cpu
+    base_image: nvidia/cuda:11.5.1-base-ubuntu20.04
+    conda_channels:
+      - conda-forge
+    conda_dependencies:
+      - python=3.9.13
+      - pytorch::pytorch=1.11.0=py3.9_cuda11.5_cudnn8.3.2_0
+      - nvidia::cudatoolkit=11.5
+      - pip:
+        - transformers[sentencepiece,audio,vision]==4.20.1
