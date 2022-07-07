@@ -107,6 +107,7 @@ def main():
             workflow_path = workflow_dir.joinpath(f"{image.framework}-{image.image_type}-{image.id}.yml")
             workflow_content = workflow_template.render(
                 image_id=f"{DOCKER_REPOSITORY}/{image.framework}-{image.image_type}:{image.id}",
+                image=f"{DOCKER_REPOSITORY}/{image.framework}-{image.image_type}",
                 tags=[f"{DOCKER_REPOSITORY}/{image.framework}-{image.image_type}:{tag}" for tag in image.tags],
                 dockerfile_dir=str(image.target_path),
                 workflow_file=str(workflow_path),

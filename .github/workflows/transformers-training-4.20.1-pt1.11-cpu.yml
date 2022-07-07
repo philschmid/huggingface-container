@@ -55,7 +55,7 @@ jobs:
     - id: push
       name: push image to registry
       run: |
-        docker push public.ecr.aws/t6m7g5n4/transformers-training:4.20.1-pt1.11-cpu --all-tags
+        docker push --all-tags public.ecr.aws/t6m7g5n4/transformers-training
 
 
     # - uses: docker/build-push-action@v1

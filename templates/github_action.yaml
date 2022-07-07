@@ -55,7 +55,7 @@ jobs:
     - id: push
       name: push image to registry
       run: |
-        docker push {{ image_id }} --all-tags
+        docker push --all-tags {{ image }}
 
 
     # - uses: docker/build-push-action@v1
