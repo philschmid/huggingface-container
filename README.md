@@ -30,7 +30,9 @@ pip install -r requirements.txt
 python generator.py
 ```
 
+## Add new images
 
+If you want to add new images you need to create a new `yaml` file similar to `transformers_training_images.yaml` and add the new images to it. You also need to create a new repository for the new images.
 
 # Conda packages
 

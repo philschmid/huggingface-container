@@ -19,30 +19,48 @@ jobs:
       with:
         python-version: "3.x"
 
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id:  ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+      with:
+        registry-type: 'public'
+
     - id: installs
+      name: install dependencies
       run: |
         pip install -r requirements.txt
 
     - id: build
+      name: build docker image
       run: |
-        docker build -t 4.20.1 -t latest -t 4.20.1-pt1.11-cpu -f transformers/training/4.20.1/pt1.11/cpu/Dockerfile transformers/training/4.20.1/pt1.11/cpu
+        docker build -t public.ecr.aws/t6m7g5n4/transformers-training:4.20.1 -t public.ecr.aws/t6m7g5n4/transformers-training:latest -t public.ecr.aws/t6m7g5n4/transformers-training:4.20.1-pt1.11-cpu -f transformers/training/4.20.1/pt1.11/cpu/Dockerfile transformers/training/4.20.1/pt1.11/cpu
     
     - id: scan
+      name: run security scans
       run: |
         echo "docker scan"
     
     - id: test
+      name: run tests
       run: |
-        pytest -q -s --tag 4.20.1-pt1.11-cpu tests/test_docker_run.py
+        pytest -q -s --tag public.ecr.aws/t6m7g5n4/transformers-training:4.20.1-pt1.11-cpu tests/test_docker_run.py
 
     - id: push
+      name: push image to registry
       run: |
-        echo "push"
+        docker push public.ecr.aws/t6m7g5n4/transformers-training:4.20.1-pt1.11-cpu --all-tags
+
 
     # - uses: docker/build-push-action@v1
     #   with:
     #     username: ${{ secrets.DOCKER_USERNAME }}
     #     password: ${{ secrets.DOCKER_PASSWORD }}
-    #     repository: phischmi/pytorch
-    #     tags: 4.20.1,latest,4.20.1-pt1.11-cpu
+    #     tags: public.ecr.aws/t6m7g5n4/transformers-training:4.20.1,public.ecr.aws/t6m7g5n4/transformers-training:latest,public.ecr.aws/t6m7g5n4/transformers-training:4.20.1-pt1.11-cpu
     #     path: transformers/training/4.20.1/pt1.11/cpu

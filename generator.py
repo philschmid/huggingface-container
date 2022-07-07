@@ -4,7 +4,7 @@ import jinja2
 import yaml
 from pathlib import Path
 
-DOCKER_REPOSITORY = "phischmi/pytorch"
+DOCKER_REPOSITORY = "public.ecr.aws/t6m7g5n4"
 
 
 @dataclass
@@ -106,9 +106,8 @@ def main():
             # write GitHub Actions workflow file
             workflow_path = workflow_dir.joinpath(f"{image.framework}-{image.image_type}-{image.id}.yml")
             workflow_content = workflow_template.render(
-                image_id=image.id,
-                repository=DOCKER_REPOSITORY,
-                tags=image.tags,
+                image_id=f"{DOCKER_REPOSITORY}/{image.framework}-{image.image_type}:{image.id}",
+                tags=[f"{DOCKER_REPOSITORY}/{image.framework}-{image.image_type}:{tag}" for tag in image.tags],
                 dockerfile_dir=str(image.target_path),
                 workflow_file=str(workflow_path),
             )
@@ -122,7 +121,7 @@ def main():
                     image.image_type,
                     ";".join(image.tags),
                     f"[dockerfile]({str(image.target_path.joinpath('Dockerfile'))})",
-                    f"{DOCKER_REPOSITORY}/{image.id}",
+                    f"{DOCKER_REPOSITORY}/{image.framework}-{image.image_type}:{image.id}",
                     str(image.deprecated),
                 ]
             )

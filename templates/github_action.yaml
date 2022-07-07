@@ -19,30 +19,48 @@ jobs:
       with:
         python-version: "3.x"
 
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id:  {% raw %}${{ secrets.AWS_ACCESS_KEY_ID }}{% endraw %}
+        aws-secret-access-key:  {% raw %}${{ secrets.AWS_SECRET_ACCESS_KEY }}{% endraw %}
+        aws-region: us-east-1
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+      with:
+        registry-type: 'public'
+
     - id: installs
+      name: install dependencies
       run: |
         pip install -r requirements.txt
 
     - id: build
+      name: build docker image
       run: |
         docker build -t {{ tags | join(' -t ') }} -f {{ dockerfile_dir }}/Dockerfile {{ dockerfile_dir }}
     
     - id: scan
+      name: run security scans
       run: |
         echo "docker scan"
     
     - id: test
+      name: run tests
       run: |
         pytest -q -s --tag {{ image_id }} tests/test_docker_run.py
 
     - id: push
+      name: push image to registry
       run: |
-        echo "push"
+        docker push {{ image_id }} --all-tags
+
 
     # - uses: docker/build-push-action@v1
     #   with:
     #     username: {% raw %}${{ secrets.DOCKER_USERNAME }}{% endraw %}
     #     password: {% raw %}${{ secrets.DOCKER_PASSWORD }}{% endraw %}
-    #     repository: {{ repository }}
     #     tags: {{ tags | join(',') }}
     #     path: {{ dockerfile_dir }}
