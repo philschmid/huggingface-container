@@ -40,6 +40,24 @@ class ContainerImage:
         print(self.target_path)
 
 
+def make_markdown_table(array):
+    """the same input as above"""
+
+    nl = "\n"
+
+    markdown = nl
+    markdown += f"| {' | '.join(array[0])} |"
+
+    markdown += nl
+    markdown += f"| {' | '.join(['---']*len(array[0]))} |"
+
+    markdown += nl
+    for entry in array[1:]:
+        markdown += f"| {' | '.join(entry)} |{nl}"
+
+    return markdown
+
+
 def main():
     # Directory for GitHub Actions workflow configuration files.
     workflow_dir = Path(".github", "workflows")
@@ -54,6 +72,7 @@ def main():
     workflow_template = jinja2.Template(workflow_template_path.read_text(encoding="utf-8"), keep_trailing_newline=True)
 
     # Read Docker image configurations.
+    image_table = [["ID", "Framework", "Type", "Tags", "Dockerfile", "URI", "Deprecated"]]
     for frameworks in Path(".").glob("*images.yaml"):
         framework_name = str(frameworks).split("_")[0]
         image_type = str(frameworks).split("_")[1]
@@ -94,6 +113,22 @@ def main():
                 workflow_file=str(workflow_path),
             )
             workflow_path.write_text(workflow_content, encoding="utf-8")
+
+            # add image to table
+            image_table.append(
+                [
+                    image.id,
+                    image.framework,
+                    image.image_type,
+                    ";".join(image.tags),
+                    f"[dockerfile]({str(image.target_path.joinpath('Dockerfile'))})",
+                    f"{DOCKER_REPOSITORY}/{image.id}",
+                    str(image.deprecated),
+                ]
+            )
+        with open("available_images.md", "w") as f:
+            f.write("# Available images\n")
+            f.write(make_markdown_table(image_table))
 
 
 if __name__ == "__main__":

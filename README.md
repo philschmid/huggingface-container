@@ -2,58 +2,34 @@
 
 This repository contains a set of Docker images for training and serving Hugging Face models for different versions and libraries. 
 The containers are structure and layered base on the following principles:
-1. accelerator (CPU,GPU,HPU) + user + mamba + labels + maintainer
-2. framework (PyTorch, Tensorflow)
-3. use case (training, inference)
-4. libraries (transformers, optimum, deepspeed)
-5. custom (products, hf endpoints etc.)
-
-## Accelerator
-
-CPU includes
-* mamba
-
-GPU inculdes
-* cuda 
-* mamba
-* openmpi (training)
-
-
-## Command
 
 ```bash
-docker compose --env-file .env build
+{framework}_{type}_images.yaml
+```
+example
+```bash
+transformers_training_images.yaml
 ```
 
-### Jupyter
+Each yaml contains X images definition for transformers.
 
-https://carpentries-incubator.github.io/introduction-to-conda-for-data-scientists/04-sharing-environments/index.html
+For the list of available DLC images, see [Available Huggingface Containers Images](). You can find more information on the images in the their respective `dockefile` and `environment.yaml` definitions.
 
-## Build example
 
-### buildx
+## Generate image definitions
+
+1. install dependencies
 
 ```bash
-docker buildx build \
-    --platform=linux/amd64 \
-    --output ./build \
-    --file base/Dockerfile.cpu \
-    .
+pip install -r requirements.txt
 ```
 
-### build
+2. generate images
 
 ```bash
-docker build -t test -f base/Dockerfile.cpu .
+python generator.py
 ```
 
-
-# TODO 
-
-* Copy logic from https://github.com/anibali/docker-pytorch with giving him credits
-* create templates 
-* create manager.py 
-* folders for transformers, optimum, custom 
 
 
 # Conda packages
