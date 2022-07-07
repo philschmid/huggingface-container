@@ -1,4 +1,4 @@
-name: Publish phischmi/pytorch:4.20.1-pt1.11-cpu
+name: transformers/training/4.20.1/pt1.11/cpu
 
 on:
   push:
@@ -25,7 +25,7 @@ jobs:
 
     - id: build
       run: |
-        docker build 4.20.1 -t latest -t 4.20.1-pt1.11-cpu -f transformers/training/4.20.1/pt1.11/cpu/Dockerfile transformers/training/4.20.1/pt1.11/cpu
+        docker build -t 4.20.1 -t latest -t 4.20.1-pt1.11-cpu -f transformers/training/4.20.1/pt1.11/cpu/Dockerfile transformers/training/4.20.1/pt1.11/cpu
     
     - id: scan
       run: |
