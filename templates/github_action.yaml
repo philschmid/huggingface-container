@@ -33,7 +33,7 @@ jobs:
     
     - id: test
       run: |
-        pytest -q -s --tag {{ id }} tests/test_docker_run.py
+        pytest -q -s --tag {{ image_id }} tests/test_docker_run.py
 
     - id: push
       run: |

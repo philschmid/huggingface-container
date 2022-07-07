@@ -74,7 +74,9 @@ def main():
     for frameworks in Path(".").glob("*images.yaml"):
         framework_name = str(frameworks).split("_")[0]
         image_type = str(frameworks).split("_")[1]
-        yaml_file = yaml.safe_load(Path(frameworks).read_text(encoding="utf-8")).items()
+        yaml_file = yaml.safe_load(Path(frameworks).read_text(encoding="utf-8"))
+        if not yaml_file:
+            continue
         images = [
             ContainerImage(
                 id=id,
@@ -84,7 +86,7 @@ def main():
                 deprecated=image.get("deprecated", False),
                 extra_tags=image.get("extra_tags", []),
             )
-            for id, image in yaml_file
+            for id, image in yaml_file.items()
         ]
 
         for image in images:
@@ -107,7 +109,7 @@ def main():
                 image_id=image.id,
                 repository=DOCKER_REPOSITORY,
                 tags=image.tags,
-                dockerfile_dir=str(image.target_path.joinpath("Dockerfile")),
+                dockerfile_dir=str(image.target_path),
                 workflow_file=str(workflow_path),
             )
             workflow_path.write_text(workflow_content, encoding="utf-8")
