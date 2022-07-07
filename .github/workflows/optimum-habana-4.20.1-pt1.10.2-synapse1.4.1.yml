@@ -1,12 +1,12 @@
-name: transformers/training/4.20.1/pt1.11/cpu
+name: optimum/habana/4.20.1/pt1.10.2/synapse1.4.1
 
 on:
   push:
     branches:
     - master
     paths:
-    - transformers/training/4.20.1/pt1.11/cpu/*
-    - .github/workflows/transformers-training-4.20.1-pt1.11-cpu.yml
+    - optimum/habana/4.20.1/pt1.10.2/synapse1.4.1/*
+    - .github/workflows/optimum-habana-4.20.1-pt1.10.2-synapse1.4.1.yml
   workflow_dispatch:
 
 jobs:
@@ -40,7 +40,7 @@ jobs:
     - id: build
       name: build docker image
       run: |
-        docker build -t public.ecr.aws/t6m7g5n4/transformers-training:4.20.1-cpu -t public.ecr.aws/t6m7g5n4/transformers-training:latest-cpu -t public.ecr.aws/t6m7g5n4/transformers-training:4.20.1-pt1.11-cpu -f transformers/training/4.20.1/pt1.11/cpu/Dockerfile transformers/training/4.20.1/pt1.11/cpu
+        docker build -t public.ecr.aws/t6m7g5n4/optimum-habana:4.20.1 -t public.ecr.aws/t6m7g5n4/optimum-habana:latest -t public.ecr.aws/t6m7g5n4/optimum-habana:4.20.1-pt1.10.2-synapse1.4.1 -f optimum/habana/4.20.1/pt1.10.2/synapse1.4.1/Dockerfile optimum/habana/4.20.1/pt1.10.2/synapse1.4.1
     
     - id: scan
       name: run security scans
@@ -50,17 +50,17 @@ jobs:
     - id: test
       name: run tests
       run: |
-        pytest -q -s --tag public.ecr.aws/t6m7g5n4/transformers-training:4.20.1-pt1.11-cpu tests/test_docker_run.py
+        pytest -q -s --tag public.ecr.aws/t6m7g5n4/optimum-habana:4.20.1-pt1.10.2-synapse1.4.1 tests/test_docker_run.py
 
     - id: push
       name: push image to registry
       run: |
-        docker push --all-tags public.ecr.aws/t6m7g5n4/transformers-training
+        docker push --all-tags public.ecr.aws/t6m7g5n4/optimum-habana
 
 
     # - uses: docker/build-push-action@v1
     #   with:
     #     username: ${{ secrets.DOCKER_USERNAME }}
     #     password: ${{ secrets.DOCKER_PASSWORD }}
-    #     tags: public.ecr.aws/t6m7g5n4/transformers-training:4.20.1-cpu,public.ecr.aws/t6m7g5n4/transformers-training:latest-cpu,public.ecr.aws/t6m7g5n4/transformers-training:4.20.1-pt1.11-cpu
-    #     path: transformers/training/4.20.1/pt1.11/cpu
+    #     tags: public.ecr.aws/t6m7g5n4/optimum-habana:4.20.1,public.ecr.aws/t6m7g5n4/optimum-habana:latest,public.ecr.aws/t6m7g5n4/optimum-habana:4.20.1-pt1.10.2-synapse1.4.1
+    #     path: optimum/habana/4.20.1/pt1.10.2/synapse1.4.1

@@ -1,6 +1,6 @@
-4.20.1-pt1.11-cuda11.5:
+1.2.3-ort1.11-cuda11.5:
   extra_tags:
-    - "4.20.1-cuda"
+    - "1.2.3-cuda"
     - latest-cuda
   template:
     template_path: templates/Dockerfile.cpu
@@ -14,14 +14,12 @@
       - python=3.9.13
       - nvidia::cudatoolkit=11.5
       - pytorch::pytorch=1.11.0=py3.9_cuda11.5_cudnn8.3.2_0
-      - tensorboard
-      - mpi4py=3.0 # installs cuda-aware openmpi
       - pip:
-        - transformers[sklearn,sentencepiece,audio,vision]==4.20.1
+        - optimum[onnxruntime-gpu]==1.2.3
 
-4.20.1-pt1.11-cpu:
+1.2.3-ort1.11-cpu:
   extra_tags:
-    - "4.20.1-cpu"
+    - "1.2.3-cpu"
     - latest-cpu
   template:
     template_path: templates/Dockerfile.cpu
@@ -36,4 +34,5 @@
       - pytorch::pytorch=1.11.0=py3.9_cpu_0
       - tensorboard
       - pip:
-        - transformers[sklearn,sentencepiece,audio,vision]==4.20.1
+        - optimum[onnxruntime]==1.2.3
+

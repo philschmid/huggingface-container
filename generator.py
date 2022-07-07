@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 import jinja2
 import yaml
 from pathlib import Path
-
+import shutil
 DOCKER_REPOSITORY = "public.ecr.aws/t6m7g5n4"
 
 
@@ -14,11 +14,12 @@ class ContainerTemplate:
     env_variables: list = field(default_factory=lambda: [])
     conda_channels: list = field(default_factory=lambda: [])
     conda_dependencies: list = field(default_factory=lambda: [])
+    pip_dependencies: list = field(default_factory=lambda: [])
 
     def __post_init__(self):
         self.jinja = jinja2.Template(Path(self.template_path).read_text(encoding="utf-8"), keep_trailing_newline=True)
         self.content = self.jinja.render(
-            base_image=self.base_image, env_vars={item["key"]: item["value"] for item in self.env_variables}
+            base_image=self.base_image, env_vars={item["key"]: item["value"] for item in self.env_variables},pip_dependencies=self.pip_dependencies
         )
 
 
@@ -62,7 +63,7 @@ def main():
     workflow_dir.mkdir(parents=True, exist_ok=True)
 
     # Delete existing build-and-push workflows.
-    for old_workflow_path in workflow_dir.glob("publish_*.yml"):
+    for old_workflow_path in workflow_dir.glob("*.yml"):
         old_workflow_path.unlink()
 
     # Template file for Docker build and push workflows.
@@ -74,6 +75,9 @@ def main():
     for frameworks in Path(".").glob("*images.yaml"):
         framework_name = str(frameworks).split("_")[0]
         image_type = str(frameworks).split("_")[1]
+        # delete old container files
+        shutil.rmtree(Path(framework_name).joinpath(image_type), ignore_errors=True)
+
         yaml_file = yaml.safe_load(Path(frameworks).read_text(encoding="utf-8"))
         if not yaml_file:
             continue
@@ -96,12 +100,13 @@ def main():
             # write dockerfile
             image.target_path.joinpath("Dockerfile").write_text(image.template.content)
             # write conda environment.yaml file
-            conda_env = {
-                "name": "base",
-                "channels": image.template.conda_channels,
-                "dependencies": image.template.conda_dependencies,
-            }
-            image.target_path.joinpath("environment.yaml").write_text(yaml.safe_dump(conda_env, sort_keys=False))
+            if image.template.conda_channels:
+                conda_env = {
+                    "name": "base",
+                    "channels": image.template.conda_channels,
+                    "dependencies": image.template.conda_dependencies,
+                }
+                image.target_path.joinpath("environment.yaml").write_text(yaml.safe_dump(conda_env, sort_keys=False))
 
             # write GitHub Actions workflow file
             workflow_path = workflow_dir.joinpath(f"{image.framework}-{image.image_type}-{image.id}.yml")

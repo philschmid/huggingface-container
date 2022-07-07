@@ -1,0 +1,27 @@
+FROM {{ base_image }}
+
+LABEL maintainer="Hugging Face"
+
+ENV DEBIAN_FRONTEND=noninteractive
+{% if env_vars %}
+{% for key, value in env_vars.items() %}
+ENV {{key}}="{{value}}"{% endfor %}
+{% endif %}
+
+RUN apt-get update \
+    && apt-get -y upgrade --only-upgrade systemd openssl cryptsetup \
+    && apt-get install -y \
+    bzip2 \
+    curl \
+    git \
+    git-lfs \
+    tar \
+    # audio
+    libsndfile1-dev \
+    ffmpeg \
+    && apt-get clean autoremove --yes \
+    && rm -rf /var/lib/{apt,dpkg,cache,log}
+
+{% if pip_dependencies %}
+RUN python3 -m pip install {% for dep in pip_dependencies %}{{dep}} {% endfor %} --no-cache-dir
+{% endif %}

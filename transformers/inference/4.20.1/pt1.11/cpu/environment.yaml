@@ -1,0 +1,8 @@
+name: base
+channels:
+- conda-forge
+dependencies:
+- python=3.9.13
+- pytorch::pytorch=1.11.0=py3.9_cpu_0
+- pip:
+  - transformers[sklearn,sentencepiece,audio,vision]==4.20.1

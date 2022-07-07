@@ -1,12 +1,12 @@
-name: transformers/training/4.20.1/pt1.11/cpu
+name: transformers/inference/4.20.1/pt1.11/cpu
 
 on:
   push:
     branches:
     - master
     paths:
-    - transformers/training/4.20.1/pt1.11/cpu/*
-    - .github/workflows/transformers-training-4.20.1-pt1.11-cpu.yml
+    - transformers/inference/4.20.1/pt1.11/cpu/*
+    - .github/workflows/transformers-inference-4.20.1-pt1.11-cpu.yml
   workflow_dispatch:
 
 jobs:
@@ -40,7 +40,7 @@ jobs:
     - id: build
       name: build docker image
       run: |
-        docker build -t public.ecr.aws/t6m7g5n4/transformers-training:4.20.1-cpu -t public.ecr.aws/t6m7g5n4/transformers-training:latest-cpu -t public.ecr.aws/t6m7g5n4/transformers-training:4.20.1-pt1.11-cpu -f transformers/training/4.20.1/pt1.11/cpu/Dockerfile transformers/training/4.20.1/pt1.11/cpu
+        docker build -t public.ecr.aws/t6m7g5n4/transformers-inference:4.20.1 -t public.ecr.aws/t6m7g5n4/transformers-inference:latest -t public.ecr.aws/t6m7g5n4/transformers-inference:4.20.1-pt1.11-cpu -f transformers/inference/4.20.1/pt1.11/cpu/Dockerfile transformers/inference/4.20.1/pt1.11/cpu
     
     - id: scan
       name: run security scans
@@ -50,17 +50,17 @@ jobs:
     - id: test
       name: run tests
       run: |
-        pytest -q -s --tag public.ecr.aws/t6m7g5n4/transformers-training:4.20.1-pt1.11-cpu tests/test_docker_run.py
+        pytest -q -s --tag public.ecr.aws/t6m7g5n4/transformers-inference:4.20.1-pt1.11-cpu tests/test_docker_run.py
 
     - id: push
       name: push image to registry
       run: |
-        docker push --all-tags public.ecr.aws/t6m7g5n4/transformers-training
+        docker push --all-tags public.ecr.aws/t6m7g5n4/transformers-inference
 
 
     # - uses: docker/build-push-action@v1
     #   with:
     #     username: ${{ secrets.DOCKER_USERNAME }}
     #     password: ${{ secrets.DOCKER_PASSWORD }}
-    #     tags: public.ecr.aws/t6m7g5n4/transformers-training:4.20.1-cpu,public.ecr.aws/t6m7g5n4/transformers-training:latest-cpu,public.ecr.aws/t6m7g5n4/transformers-training:4.20.1-pt1.11-cpu
-    #     path: transformers/training/4.20.1/pt1.11/cpu
+    #     tags: public.ecr.aws/t6m7g5n4/transformers-inference:4.20.1,public.ecr.aws/t6m7g5n4/transformers-inference:latest,public.ecr.aws/t6m7g5n4/transformers-inference:4.20.1-pt1.11-cpu
+    #     path: transformers/inference/4.20.1/pt1.11/cpu

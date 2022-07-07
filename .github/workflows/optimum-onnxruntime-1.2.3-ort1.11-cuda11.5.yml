@@ -1,12 +1,12 @@
-name: transformers/training/4.20.1/pt1.11/cuda11.6
+name: optimum/onnxruntime/1.2.3/ort1.11/cuda11.5
 
 on:
   push:
     branches:
     - master
     paths:
-    - transformers/training/4.20.1/pt1.11/cuda11.6/*
-    - .github/workflows/transformers-training-4.20.1-pt1.11-cuda11.6.yml
+    - optimum/onnxruntime/1.2.3/ort1.11/cuda11.5/*
+    - .github/workflows/optimum-onnxruntime-1.2.3-ort1.11-cuda11.5.yml
   workflow_dispatch:
 
 jobs:
@@ -40,7 +40,7 @@ jobs:
     - id: build
       name: build docker image
       run: |
-        docker build -t public.ecr.aws/t6m7g5n4/transformers-training:4.20.1 -t public.ecr.aws/t6m7g5n4/transformers-training:latest -t public.ecr.aws/t6m7g5n4/transformers-training:4.20.1-pt1.11-cuda11.6 -f transformers/training/4.20.1/pt1.11/cuda11.6/Dockerfile transformers/training/4.20.1/pt1.11/cuda11.6
+        docker build -t public.ecr.aws/t6m7g5n4/optimum-onnxruntime:1.2.3-cuda -t public.ecr.aws/t6m7g5n4/optimum-onnxruntime:latest-cuda -t public.ecr.aws/t6m7g5n4/optimum-onnxruntime:1.2.3-ort1.11-cuda11.5 -f optimum/onnxruntime/1.2.3/ort1.11/cuda11.5/Dockerfile optimum/onnxruntime/1.2.3/ort1.11/cuda11.5
     
     - id: scan
       name: run security scans
@@ -50,17 +50,17 @@ jobs:
     - id: test
       name: run tests
       run: |
-        pytest -q -s --tag public.ecr.aws/t6m7g5n4/transformers-training:4.20.1-pt1.11-cuda11.6 tests/test_docker_run.py
+        pytest -q -s --tag public.ecr.aws/t6m7g5n4/optimum-onnxruntime:1.2.3-ort1.11-cuda11.5 tests/test_docker_run.py
 
     - id: push
       name: push image to registry
       run: |
-        docker push --all-tags public.ecr.aws/t6m7g5n4/transformers-training
+        docker push --all-tags public.ecr.aws/t6m7g5n4/optimum-onnxruntime
 
 
     # - uses: docker/build-push-action@v1
     #   with:
     #     username: ${{ secrets.DOCKER_USERNAME }}
     #     password: ${{ secrets.DOCKER_PASSWORD }}
-    #     tags: public.ecr.aws/t6m7g5n4/transformers-training:4.20.1,public.ecr.aws/t6m7g5n4/transformers-training:latest,public.ecr.aws/t6m7g5n4/transformers-training:4.20.1-pt1.11-cuda11.6
-    #     path: transformers/training/4.20.1/pt1.11/cuda11.6
+    #     tags: public.ecr.aws/t6m7g5n4/optimum-onnxruntime:1.2.3-cuda,public.ecr.aws/t6m7g5n4/optimum-onnxruntime:latest-cuda,public.ecr.aws/t6m7g5n4/optimum-onnxruntime:1.2.3-ort1.11-cuda11.5
+    #     path: optimum/onnxruntime/1.2.3/ort1.11/cuda11.5
