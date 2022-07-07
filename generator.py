@@ -3,8 +3,6 @@ from dataclasses import dataclass, field
 import jinja2
 import yaml
 from pathlib import Path
-from dataclass_wizard import YAMLWizard
-
 
 DOCKER_REPOSITORY = "phischmi/pytorch"
 

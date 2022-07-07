@@ -14,10 +14,35 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: docker/build-push-action@v1
+    - name: Setup Python
+      uses: actions/setup-python@v2
       with:
-        username: {% raw %}${{ secrets.DOCKER_USERNAME }}{% endraw %}
-        password: {% raw %}${{ secrets.DOCKER_PASSWORD }}{% endraw %}
-        repository: {{ repository }}
-        tags: {{ tags | join(',') }}
-        path: {{ dockerfile_dir }}
+        python-version: "3.x"
+
+    - id: installs
+      run: |
+        pip install -r requirements.txt
+
+    - id: build
+      run: |
+        docker build -t {{ tags | join(',') }} -f {{ dockerfile_dir }}/Dockerfile {{ dockerfile_dir }}
+    
+    - id: scan
+      run: |
+        echo "docker scan"
+    
+    - id: test
+      run: |
+        pytest -q -s --tag {{ id }} tests/test_docker_run.py
+
+    - id: push
+      run: |
+        echo "push"
+
+    # - uses: docker/build-push-action@v1
+    #   with:
+    #     username: {% raw %}${{ secrets.DOCKER_USERNAME }}{% endraw %}
+    #     password: {% raw %}${{ secrets.DOCKER_PASSWORD }}{% endraw %}
+    #     repository: {{ repository }}
+    #     tags: {{ tags | join(',') }}
+    #     path: {{ dockerfile_dir }}
