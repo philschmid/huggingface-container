@@ -25,7 +25,7 @@ jobs:
 
     - id: build
       run: |
-        docker build -t {{ tags | join(',') }} -f {{ dockerfile_dir }}/Dockerfile {{ dockerfile_dir }}
+        docker build {{ tags | join(' -t ') }} -f {{ dockerfile_dir }}/Dockerfile {{ dockerfile_dir }}
     
     - id: scan
       run: |
