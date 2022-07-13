@@ -4,7 +4,8 @@ import jinja2
 import yaml
 from pathlib import Path
 import shutil
-DOCKER_REPOSITORY = "public.ecr.aws/t6m7g5n4"
+
+DOCKER_REPOSITORY = "huggingface"
 
 
 @dataclass
@@ -19,22 +20,23 @@ class ContainerTemplate:
     def __post_init__(self):
         self.jinja = jinja2.Template(Path(self.template_path).read_text(encoding="utf-8"), keep_trailing_newline=True)
         self.content = self.jinja.render(
-            base_image=self.base_image, env_vars={item["key"]: item["value"] for item in self.env_variables},pip_dependencies=self.pip_dependencies
+            base_image=self.base_image,
+            env_vars={item["key"]: item["value"] for item in self.env_variables},
+            pip_dependencies=self.pip_dependencies,
         )
 
 
 @dataclass
 class ContainerImage:
     id: str
-    image_type: str
+    base_target_path: Path
     template: ContainerTemplate
-    framework: str
     extra_tags: list = field(default_factory=lambda: [])
     deprecated: bool = False
 
     def __post_init__(self):
         self.tags = self.extra_tags + [self.id]
-        self.target_path = Path(self.framework).joinpath(self.image_type).joinpath(*self.id.split("-"))
+        self.target_path = self.base_target_path.joinpath(*self.id.split("-"))
         self.target_path.mkdir(parents=True, exist_ok=True)
         print(self.target_path)
 
@@ -70,22 +72,24 @@ def main():
     workflow_template_path = Path("templates").joinpath("github_action.yaml")
     workflow_template = jinja2.Template(workflow_template_path.read_text(encoding="utf-8"), keep_trailing_newline=True)
 
-    # Read Docker image configurations.
+    # Read container image buildspecs.
     image_table = [["ID", "Framework", "Type", "Tags", "Dockerfile", "URI", "Deprecated"]]
-    for frameworks in Path(".").glob("*images.yaml"):
-        framework_name = str(frameworks).split("_")[0]
-        image_type = str(frameworks).split("_")[1]
-        # delete old container files
-        shutil.rmtree(Path(framework_name).joinpath(image_type), ignore_errors=True)
+    for buildpsec in Path("buildspec").glob("**/buildspec.yaml"):
+        # creates path-to-build from buildspec/path/to/build
+        updated_path_to_buildspec = Path(*buildpsec.parts[1:-1])
+        container_repository = str(updated_path_to_buildspec).replace("/", "-")
+        base_target_path = Path("containers").joinpath(updated_path_to_buildspec)
 
-        yaml_file = yaml.safe_load(Path(frameworks).read_text(encoding="utf-8"))
+        # delete old container files
+        shutil.rmtree(updated_path_to_buildspec, ignore_errors=True)
+
+        yaml_file = yaml.safe_load(buildpsec.read_text(encoding="utf-8"))
         if not yaml_file:
             continue
         images = [
             ContainerImage(
                 id=id,
-                framework=framework_name,
-                image_type=image_type,
+                base_target_path=base_target_path,
                 template=ContainerTemplate(**image["template"]),
                 deprecated=image.get("deprecated", False),
                 extra_tags=image.get("extra_tags", []),
@@ -109,11 +113,11 @@ def main():
                 image.target_path.joinpath("environment.yaml").write_text(yaml.safe_dump(conda_env, sort_keys=False))
 
             # write GitHub Actions workflow file
-            workflow_path = workflow_dir.joinpath(f"{image.framework}-{image.image_type}-{image.id}.yml")
+            workflow_path = workflow_dir.joinpath(f'{"-".join(image.target_path.parts[1:])}.yml')
             workflow_content = workflow_template.render(
-                image_id=f"{DOCKER_REPOSITORY}/{image.framework}-{image.image_type}:{image.id}",
-                image=f"{DOCKER_REPOSITORY}/{image.framework}-{image.image_type}",
-                tags=[f"{DOCKER_REPOSITORY}/{image.framework}-{image.image_type}:{tag}" for tag in image.tags],
+                image_id=f"{DOCKER_REPOSITORY}/{container_repository}:{image.id}",
+                image=f"{DOCKER_REPOSITORY}/{container_repository}",
+                tags=[f"{DOCKER_REPOSITORY}/{container_repository}:{tag}" for tag in image.tags],
                 dockerfile_dir=str(image.target_path),
                 workflow_file=str(workflow_path),
             )
@@ -123,11 +127,11 @@ def main():
             image_table.append(
                 [
                     image.id,
-                    image.framework,
-                    image.image_type,
+                    container_repository.split("-")[0],
+                    container_repository.split("-")[1],
                     ";".join(image.tags),
                     f"[dockerfile]({str(image.target_path.joinpath('Dockerfile'))})",
-                    f"{DOCKER_REPOSITORY}/{image.framework}-{image.image_type}:{image.id}",
+                    f"{DOCKER_REPOSITORY}/{container_repository}:{image.id}",
                     str(image.deprecated),
                 ]
             )
