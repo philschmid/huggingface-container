@@ -1,9 +1,0 @@
-name: base
-channels:
-- conda-forge
-dependencies:
-- python=3.9.13
-- nvidia::cudatoolkit=11.5
-- pytorch::pytorch=1.11.0=py3.9_cuda11.5_cudnn8.3.2_0
-- pip:
-  - optimum[onnxruntime-gpu]==1.2.3

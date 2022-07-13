@@ -1,0 +1,41 @@
+4.20.1-pt1.11-cuda11.5:
+  extra_tags:
+    - "4.20.1-cuda"
+    - latest-cuda
+  template:
+    template_path: templates/Dockerfile.cpu
+    base_image: nvidia/cuda:11.5.1-base-ubuntu20.04
+    env_variables:
+      - key: TEST
+        value: 1
+    conda_channels:
+      - conda-forge
+    conda_dependencies:
+      - python=3.9.13
+      - nvidia::cudatoolkit=11.5
+      - pytorch::pytorch=1.11.0=py3.9_cuda11.5_cudnn8.3.2_0
+      - tensorboard
+      - mpi4py=3.0 # installs cuda-aware openmpi
+      - pip:
+        - transformers[sklearn,sentencepiece,audio,vision]==4.20.1
+        - datasets==2.3.2
+
+4.20.1-pt1.11-cpu:
+  extra_tags:
+    - "4.20.1-cpu"
+    - latest-cpu
+  template:
+    template_path: templates/Dockerfile.cpu
+    base_image: ubuntu:20.04
+    env_variables:
+      - key: TEST
+        value: 1
+    conda_channels:
+      - conda-forge
+    conda_dependencies:
+      - python=3.9.13
+      - pytorch::pytorch=1.11.0=py3.9_cpu_0
+      - tensorboard
+      - pip:
+        - transformers[sklearn,sentencepiece,audio,vision]==4.20.1
+        - datasets==2.3.2

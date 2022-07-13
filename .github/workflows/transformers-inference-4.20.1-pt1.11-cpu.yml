@@ -1,11 +1,17 @@
-name: transformers/inference/4.20.1/pt1.11/cpu
+name: containers/transformers/inference/4.20.1/pt1.11/cpu
 
 on:
   push:
     branches:
-    - master
+    - main
     paths:
-    - transformers/inference/4.20.1/pt1.11/cpu/*
+    - containers/transformers/inference/4.20.1/pt1.11/cpu/*
+    - .github/workflows/transformers-inference-4.20.1-pt1.11-cpu.yml
+  pull_request:
+    branches:
+    - main
+    paths:
+    - containers/transformers/inference/4.20.1/pt1.11/cpu/*
     - .github/workflows/transformers-inference-4.20.1-pt1.11-cpu.yml
   workflow_dispatch:
 
@@ -19,18 +25,12 @@ jobs:
       with:
         python-version: "3.x"
 
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v1
+    - id: login 
+      name: Login to DockerHub
+      uses: docker/login-action@v2
       with:
-        aws-access-key-id:  ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1
-
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
-      with:
-        registry-type: 'public'
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
 
     - id: installs
       name: install dependencies
@@ -40,7 +40,7 @@ jobs:
     - id: build
       name: build docker image
       run: |
-        docker build -t public.ecr.aws/t6m7g5n4/transformers-inference:4.20.1 -t public.ecr.aws/t6m7g5n4/transformers-inference:latest -t public.ecr.aws/t6m7g5n4/transformers-inference:4.20.1-pt1.11-cpu -f transformers/inference/4.20.1/pt1.11/cpu/Dockerfile transformers/inference/4.20.1/pt1.11/cpu
+        docker build -t huggingface/transformers-inference:4.20.1-cpu -t huggingface/transformers-inference:latest-cpu -t huggingface/transformers-inference:4.20.1-pt1.11-cpu -f containers/transformers/inference/4.20.1/pt1.11/cpu/Dockerfile containers/transformers/inference/4.20.1/pt1.11/cpu
     
     - id: scan
       name: run security scans
@@ -50,17 +50,10 @@ jobs:
     - id: test
       name: run tests
       run: |
-        pytest -q -s --tag public.ecr.aws/t6m7g5n4/transformers-inference:4.20.1-pt1.11-cpu tests/test_docker_run.py
+        pytest -q -s --tag huggingface/transformers-inference:4.20.1-pt1.11-cpu tests/test_docker_run.py
 
     - id: push
       name: push image to registry
+      if: github.event_name == 'push'
       run: |
-        docker push --all-tags public.ecr.aws/t6m7g5n4/transformers-inference
-
-
-    # - uses: docker/build-push-action@v1
-    #   with:
-    #     username: ${{ secrets.DOCKER_USERNAME }}
-    #     password: ${{ secrets.DOCKER_PASSWORD }}
-    #     tags: public.ecr.aws/t6m7g5n4/transformers-inference:4.20.1,public.ecr.aws/t6m7g5n4/transformers-inference:latest,public.ecr.aws/t6m7g5n4/transformers-inference:4.20.1-pt1.11-cpu
-    #     path: transformers/inference/4.20.1/pt1.11/cpu
+        docker push --all-tags huggingface/transformers-inference
