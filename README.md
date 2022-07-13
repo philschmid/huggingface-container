@@ -23,7 +23,7 @@ All containers in the repository are publicly availabe through the Dockerhub. Yo
 docker pull huggingface/transformers-training:4.20.1-pt1.11-cuda11.5
 ```
 2. Use Transformers training image in your Dockerfile:
-```
+```Dockerfile
 FROM huggingface/transformers-training:4.20.1-pt1.11-cuda11.5
 ...
 ```
