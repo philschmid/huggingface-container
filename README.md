@@ -14,6 +14,20 @@ The containers are structure and scoped base on the following principles:
 
 For the list of available DLC images, see [Available Huggingface Containers Images](available_images.md). You can find more information for each image their respective `Dockerfile` and `environment.yaml` definitions.
 
+## How to use Hugging Face Containers
+
+All containers in the repository are publicly availabe through the Dockerhub. You can find all of the images in the [Available Huggingface Containers Images](available_images.md). In the table you can find a column for the `URI`. Meaning that you can simply run `docker pull` or use the images as in your on `Dockerfile` with `FROM ...`. Below you find two examples:
+
+1. Pull Transformers training image:
+```
+docker pull huggingface/transformers-training:4.20.1-pt1.11-cuda11.5
+```
+2. Use Transformers training image in your Dockerfile:
+```
+FROM huggingface/transformers-training:4.20.1-pt1.11-cuda11.5
+...
+```
+
 ## Repository Structure
 
 Below is a tree structure of the repository with comments
@@ -36,7 +50,7 @@ If you want to add new images you need to follow the steps below:
 
 ### 1. Create new Repository in the Hugging Face Dockerhub account. 
 
-If you don't have access to the Dockerhub account ping @philschmid in the PR of your new container.
+If you don't have access to the Dockerhub account ping @philschmid in the PR of your new container. Make sure to prepare a overview for the dockerhub page. You can find a example in [overview.md](overview.md).
 
 ### 2. Create a new `buildspec` in the `buildspec/` folder
 
@@ -70,3 +84,9 @@ The last step is to create a PR into the `main` branch this will trigger you gen
 
 * [pytorch](https://anaconda.org/pytorch/pytorch/files)
 * [cudatoolkit](https://anaconda.org/nvidia/cuda-toolkit/files)
+
+
+## Next Steps
+
+* [ ] Think about good testing
+* [ ] Add Scans and Lints into CI.
