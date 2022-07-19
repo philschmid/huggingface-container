@@ -9,4 +9,4 @@ dependencies:
 - pip:
   - transformers[sentencepiece]==4.20.1
   - datasets==2.3.2
-  - deepspeed --global-option="build_ext" --global-option="-j8" --no-cache -v --disable-pip-version-check
+  - deepspeed --global-option="build_ext" --global-option="-j8"
