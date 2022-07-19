@@ -1,7 +1,7 @@
-4.20.1-pt1.11-cuda11.5-deepspeed-training:
+4.20.1-pt1.11-cuda11.5-training:
   extra_tags:
-    - "4.20.1-deepspeed-training"
-    - latest-deepspeed-training
+    - "4.20.1-training"
+    - latest-training
   template:
     template_path: templates/Dockerfile.cpu
     base_image: nvidia/cuda:11.3.1-base-ubuntu20.04
@@ -25,10 +25,10 @@
         - datasets==2.3.2
         - deepspeed --global-option="build_ext" --global-option="-j8" --no-cache -v --disable-pip-version-check
 
-4.20.1-pt1.11-cuda11.5-deepspeed-inference:
+4.20.1-pt1.11-cuda11.5-inference:
   extra_tags:
-    - "4.20.1-deepspeed-inference"
-    - latest-deepspeed-inference
+    - "4.20.1-inference"
+    - latest-inference
   template:
     template_path: templates/Dockerfile.cpu
     base_image: nvidia/cuda:11.3.1-base-ubuntu20.04

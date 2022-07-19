@@ -1,0 +1,13 @@
+name: base
+channels:
+- conda-forge
+dependencies:
+- python=3.9.13
+- nvidia::cudatoolkit=11.3
+- pytorch::pytorch=1.11.0=py3.9_cuda11.3_cudnn8.2.0_0
+- tensorboard
+- mpi4py=3.0
+- pip:
+  - transformers[sklearn,sentencepiece,audio,vision]==4.20.1
+  - datasets==2.3.2
+  - deepspeed --global-option="build_ext" --global-option="-j8" --no-cache -v --disable-pip-version-check
