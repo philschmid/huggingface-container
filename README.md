@@ -86,6 +86,9 @@ The last step is to create a PR into the `main` branch this will trigger you gen
 * [cudatoolkit](https://anaconda.org/nvidia/cuda-toolkit/files)
 
 
+## Helpful resources
+* [Blog](https://towardsdatascience.com/managing-cuda-dependencies-with-conda-89c5d817e7e1)
+
 ## Next Steps
 
 * [ ] Think about good testing

@@ -10,4 +10,3 @@ dependencies:
 - pip:
   - transformers[sklearn,sentencepiece,audio,vision]==4.20.1
   - datasets==2.3.2
-  - deepspeed --global-option="build_ext" --global-option="-j8"

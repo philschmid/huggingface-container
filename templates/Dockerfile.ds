@@ -1,12 +1,12 @@
-FROM nvidia/cuda:11.3.1-base-ubuntu20.04
+FROM {{ base_image }}
 
 LABEL maintainer="Hugging Face"
 
 ENV DEBIAN_FRONTEND=noninteractive
-
-
-ENV DS_BUILD_TRANSFORMER_INFERENCE="1"
-
+{% if env_vars %}
+{% for key, value in env_vars.items() %}
+ENV {{key}}="{{value}}"{% endfor %}
+{% endif %}
 
 RUN apt-get update \
     && apt-get -y upgrade --only-upgrade systemd openssl cryptsetup \
@@ -16,6 +16,9 @@ RUN apt-get update \
     git \
     git-lfs \
     tar \
+    #deepseed
+    libaio-dev \
+    cmake \
     # audio
     libsndfile1-dev \
     ffmpeg \
@@ -46,5 +49,8 @@ RUN micromamba install -y -n base -f environment.yaml \
     && rm environment.yaml \
     && micromamba clean --all --yes
 
+{% if pip_dependencies %}
+RUN python3 -m pip install {% for dep in pip_dependencies %}{{dep}} {% endfor %} --no-cache-dir
+{% endif %}
 
 ENTRYPOINT [ "python3" ]
