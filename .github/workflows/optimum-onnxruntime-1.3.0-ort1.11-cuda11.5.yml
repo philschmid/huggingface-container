@@ -1,18 +1,18 @@
-name: containers/optimum/onnxruntime/1.2.3/ort1.11/cuda11.5
+name: containers/optimum/onnxruntime/1.3.0/ort1.11/cuda11.5
 
 on:
   push:
     branches:
     - main
     paths:
-    - containers/optimum/onnxruntime/1.2.3/ort1.11/cuda11.5/*
-    - .github/workflows/optimum-onnxruntime-1.2.3-ort1.11-cuda11.5.yml
+    - containers/optimum/onnxruntime/1.3.0/ort1.11/cuda11.5/*
+    - .github/workflows/optimum-onnxruntime-1.3.0-ort1.11-cuda11.5.yml
   pull_request:
     branches:
     - main
     paths:
-    - containers/optimum/onnxruntime/1.2.3/ort1.11/cuda11.5/*
-    - .github/workflows/optimum-onnxruntime-1.2.3-ort1.11-cuda11.5.yml
+    - containers/optimum/onnxruntime/1.3.0/ort1.11/cuda11.5/*
+    - .github/workflows/optimum-onnxruntime-1.3.0-ort1.11-cuda11.5.yml
   workflow_dispatch:
 
 jobs:
@@ -40,7 +40,7 @@ jobs:
     - id: build
       name: build docker image
       run: |
-        docker build -t huggingface/optimum-onnxruntime:1.2.3-cuda -t huggingface/optimum-onnxruntime:latest-cuda -t huggingface/optimum-onnxruntime:1.2.3-ort1.11-cuda11.5 -f containers/optimum/onnxruntime/1.2.3/ort1.11/cuda11.5/Dockerfile containers/optimum/onnxruntime/1.2.3/ort1.11/cuda11.5
+        docker build -t huggingface/optimum-onnxruntime:1.3.0-cuda -t huggingface/optimum-onnxruntime:latest-cuda -t huggingface/optimum-onnxruntime:1.3.0-ort1.11-cuda11.5 -f containers/optimum/onnxruntime/1.3.0/ort1.11/cuda11.5/Dockerfile containers/optimum/onnxruntime/1.3.0/ort1.11/cuda11.5
     
     - id: scan
       name: run security scans
@@ -50,7 +50,7 @@ jobs:
     - id: test
       name: run tests
       run: |
-        pytest -q -s --tag huggingface/optimum-onnxruntime:1.2.3-ort1.11-cuda11.5 tests/test_docker_run.py
+        pytest -q -s --tag huggingface/optimum-onnxruntime:1.3.0-ort1.11-cuda11.5 tests/test_docker_run.py
 
     - id: push
       name: push image to registry
