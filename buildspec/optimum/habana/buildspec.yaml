@@ -1,12 +1,12 @@
-4.20.1-pt1.11.0-synapse1.5.0:
+4.21.1-pt1.11.0-synapse1.5.0:
   extra_tags:
-    - "4.20.1"
+    - "4.21.1"
     - latest
   template:
     template_path: templates/Dockerfile.hpu
     base_image: vault.habana.ai/gaudi-docker/1.5.0/ubuntu20.04/habanalabs/pytorch-installer-1.11.0:latest
     pip_dependencies:
       - tensorboard
-      - transformers[sklearn,sentencepiece,audio,vision]==4.20.1
-      - datasets==2.3.2
+      - transformers[sklearn,sentencepiece,audio,vision]==4.21.1
+      - datasets==2.4.0
       - optimum[habana]
