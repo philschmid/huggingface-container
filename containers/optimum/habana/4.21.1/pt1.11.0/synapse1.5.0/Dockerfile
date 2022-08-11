@@ -20,4 +20,6 @@ RUN apt-get update \
     && rm -rf /var/lib/{apt,dpkg,cache,log}
 
 
-RUN python3 -m pip install tensorboard transformers[sklearn,sentencepiece,audio,vision]==4.21.1 datasets==2.4.0 optimum[habana]  --no-cache-dir
+RUN python3 -m pip install tensorboard transformers[sklearn,sentencepiece,audio,vision]==4.21.1 datasets==2.4.0 --no-cache-dir
+RUN python3 -m pip install git+https://github.com/huggingface/optimum-habana.git@check_torch_init_distributed  --no-cache-dir
+
