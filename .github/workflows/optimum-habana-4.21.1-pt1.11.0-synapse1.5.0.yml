@@ -40,7 +40,7 @@ jobs:
     - id: build
       name: build docker image
       run: |
-        docker build -t huggingface/optimum-habana:4.21.1 -t huggingface/optimum-habana:latest -t huggingface/optimum-habana:4.21.1-pt1.11.0-synapse1.5.0 -f containers/optimum/habana/4.21.1/pt1.11.0/synapse1.5.0/Dockerfile containers/optimum/habana/4.21.1/pt1.11.0/synapse1.5.0
+        docker build -t huggingface/optimum-habana:test -f containers/optimum/habana/4.21.1/pt1.11.0/synapse1.5.0/Dockerfile containers/optimum/habana/4.21.1/pt1.11.0/synapse1.5.0
     
     - id: scan
       name: run security scans
@@ -54,6 +54,5 @@ jobs:
 
     - id: push
       name: push image to registry
-      if: github.event_name == 'push'
       run: |
         docker push --all-tags huggingface/optimum-habana
