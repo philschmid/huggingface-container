@@ -1,6 +1,6 @@
-4.20.1-pt1.11-cuda11.3-training:
+4.21.1-pt1.11-cuda11.3-training:
   extra_tags:
-    - "4.20.1-training"
+    - "4.21.1-training"
     - latest-training
   template:
     template_path: templates/Dockerfile.ds
@@ -12,6 +12,8 @@
         value: 1
       - key: DS_BUILD_UTILS
         value: 1
+      - key: DS_BUILD_TRANSFORMER
+        value: 1
     conda_channels:
       - conda-forge
     conda_dependencies:
@@ -21,22 +23,24 @@
       - tensorboard
       - mpi4py=3.0 # installs cuda-aware openmpi
       - pip:
-        - transformers[sklearn,sentencepiece,audio,vision]==4.20.1
+        - transformers[sklearn,sentencepiece,audio,vision]==4.21.1
         - datasets==2.3.2
     pip_dependencies:
       - deepspeed --global-option="build_ext" --global-option="-j8"
 
-4.20.1-pt1.11-cuda11.3-inference:
+4.21.1-pt1.11-cuda11.3-inference:
   extra_tags:
-    - "4.20.1-inference"
+    - "4.21.1-inference"
     - latest-inference
   template:
-    template_path: templates/Dockerfile.cpu
+    template_path: templates/Dockerfile.ds
     base_image: nvidia/cuda:11.3.1-base-ubuntu20.04
     env_variables:
       - key: DS_BUILD_TRANSFORMER_INFERENCE
         value: 1
       - key: DS_BUILD_UTILS
+        value: 1
+      - key: DS_BUILD_TRANSFORMER
         value: 1
     conda_channels:
       - conda-forge
@@ -48,7 +52,7 @@
       - pytorch::pytorch=1.11.0=py3.9_cuda11.3_cudnn8.2.0_0
       - mpi4py=3.0 # installs cuda-aware openmpi
       - pip:
-        - transformers[sentencepiece,audio,vision]==4.20.1
+        - transformers[sentencepiece,audio,vision]==4.21.1
         - datasets==2.3.2
     pip_dependencies:
       - deepspeed --global-option="build_ext" --global-option="-j8"

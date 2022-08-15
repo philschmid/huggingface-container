@@ -1,18 +1,18 @@
-name: containers/transformers/deepspeed/4.20.1/pt1.11/cuda11.3/training
+name: containers/transformers/deepspeed/4.21.1/pt1.11/cuda11.3/inference
 
 on:
   push:
     branches:
     - main
     paths:
-    - containers/transformers/deepspeed/4.20.1/pt1.11/cuda11.3/training/*
-    - .github/workflows/transformers-deepspeed-4.20.1-pt1.11-cuda11.3-training.yml
+    - containers/transformers/deepspeed/4.21.1/pt1.11/cuda11.3/inference/*
+    - .github/workflows/transformers-deepspeed-4.21.1-pt1.11-cuda11.3-inference.yml
   pull_request:
     branches:
     - main
     paths:
-    - containers/transformers/deepspeed/4.20.1/pt1.11/cuda11.3/training/*
-    - .github/workflows/transformers-deepspeed-4.20.1-pt1.11-cuda11.3-training.yml
+    - containers/transformers/deepspeed/4.21.1/pt1.11/cuda11.3/inference/*
+    - .github/workflows/transformers-deepspeed-4.21.1-pt1.11-cuda11.3-inference.yml
   workflow_dispatch:
 
 jobs:
@@ -40,7 +40,7 @@ jobs:
     - id: build
       name: build docker image
       run: |
-        docker build -t huggingface/transformers-deepspeed:4.20.1-training -t huggingface/transformers-deepspeed:latest-training -t huggingface/transformers-deepspeed:4.20.1-pt1.11-cuda11.3-training -f containers/transformers/deepspeed/4.20.1/pt1.11/cuda11.3/training/Dockerfile containers/transformers/deepspeed/4.20.1/pt1.11/cuda11.3/training
+        docker build -t huggingface/transformers-deepspeed:4.21.1-inference -t huggingface/transformers-deepspeed:latest-inference -t huggingface/transformers-deepspeed:4.21.1-pt1.11-cuda11.3-inference -f containers/transformers/deepspeed/4.21.1/pt1.11/cuda11.3/inference/Dockerfile containers/transformers/deepspeed/4.21.1/pt1.11/cuda11.3/inference
     
     - id: scan
       name: run security scans
@@ -50,10 +50,10 @@ jobs:
     - id: test
       name: run tests
       run: |
-        pytest -q -s --tag huggingface/transformers-deepspeed:4.20.1-pt1.11-cuda11.3-training tests/test_docker_run.py
+        pytest -q -s --tag huggingface/transformers-deepspeed:4.21.1-pt1.11-cuda11.3-inference tests/test_docker_run.py
 
     - id: push
       name: push image to registry
-      if: github.event_name == 'push'
+      # if: github.event_name == 'push'
       run: |
         docker push --all-tags huggingface/transformers-deepspeed
