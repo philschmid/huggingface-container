@@ -1,0 +1,58 @@
+FROM nvidia/cuda:11.3.1-base-ubuntu20.04
+
+LABEL maintainer="Hugging Face"
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+
+ENV DS_BUILD_TRANSFORMER_INFERENCE="1"
+ENV DS_BUILD_UTILS="1"
+ENV DS_BUILD_TRANSFORMER="1"
+
+
+RUN apt-get update \
+    && apt-get -y upgrade --only-upgrade systemd openssl cryptsetup \
+    && apt-get install -y \
+    bzip2 \
+    curl \
+    git \
+    git-lfs \
+    tar \
+    #deepseed
+    libaio-dev \
+    cmake \
+    # audio
+    libsndfile1-dev \
+    ffmpeg \
+    && apt-get clean autoremove --yes \
+    && rm -rf /var/lib/{apt,dpkg,cache,log}
+
+# # Create a non-root user and switch to it
+# RUN adduser --disabled-password --gecos '' --shell /bin/bash user \
+#  && chown -R user:user /app
+# RUN echo "user ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/90-user
+# USER user
+# # All users can use /home/user as their home directory
+# ENV HOME=/home/user
+# RUN chmod 777 /home/user
+
+# install micromamba
+ENV MAMBA_ROOT_PREFIX=/opt/conda
+ENV PATH=/opt/conda/bin:$PATH
+RUN curl -L https://micromamba.snakepit.net/api/micromamba/linux-64/latest | tar -xj "bin/micromamba" \
+    && touch /root/.bashrc \
+    && ./bin/micromamba shell init -s bash -p /opt/conda  \
+    && grep -v '[ -z "\$PS1" ] && return' /root/.bashrc  > /opt/conda/bashrc
+
+WORKDIR /app
+# install python dependencies
+COPY environment.yaml /app/environment.yaml
+RUN micromamba install -y -n base -f environment.yaml \
+    && rm environment.yaml \
+    && micromamba clean --all --yes
+
+
+RUN python3 -m pip install deepspeed --global-option="build_ext" --global-option="-j8"  --no-cache-dir
+
+
+ENTRYPOINT [ "python3" ]
