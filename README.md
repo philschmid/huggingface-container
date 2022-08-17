@@ -84,6 +84,7 @@ The last step is to create a PR into the `main` branch this will trigger you gen
 
 * [pytorch](https://anaconda.org/pytorch/pytorch/files)
 * [cudatoolkit](https://anaconda.org/nvidia/cuda-toolkit/files)
+* [Wildcard example for installing](https://github.com/tensorflow/tensorflow/issues/52988#issuecomment-1161829152)
 
 
 ## Helpful resources
