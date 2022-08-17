@@ -45,6 +45,3 @@ COPY environment.yaml /app/environment.yaml
 RUN micromamba install -y -n base -f environment.yaml \
     && rm environment.yaml \
     && micromamba clean --all --yes
-
-
-ENTRYPOINT [ "python3" ]

@@ -52,5 +52,3 @@ RUN micromamba install -y -n base -f environment.yaml \
 {% if pip_dependencies %}
 RUN python3 -m pip install {% for dep in pip_dependencies %}{{dep}} {% endfor %} --no-cache-dir
 {% endif %}
-
-ENTRYPOINT [ "python3" ]
