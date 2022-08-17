@@ -1,0 +1,11 @@
+name: base
+channels:
+- conda-forge
+dependencies:
+- python=3.9.13
+- nvidia::cudatoolkit=11.2
+- tensorflow=2.9.1=*cuda112*py39*
+- tensorboard
+- pip:
+  - transformers[sklearn,sentencepiece,audio,vision]==4.21.1
+  - tensorflow-text

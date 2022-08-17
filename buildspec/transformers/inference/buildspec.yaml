@@ -1,7 +1,7 @@
-4.20.1-pt1.11-cuda11.5:
+4.21.1-pt1.11-cuda11.5:
   extra_tags:
-    - "4.20.1-cuda"
-    - latest-cuda
+    - "4.21.1-pt-cuda"
+    - latest-pt-cuda
   template:
     template_path: templates/Dockerfile.cpu
     base_image: nvidia/cuda:11.5.1-base-ubuntu20.04
@@ -15,9 +15,50 @@
       - nvidia::cudatoolkit=11.5
       - pytorch::pytorch=1.11.0=py3.9_cuda11.5_cudnn8.3.2_0
       - pip:
-        - transformers[sklearn,sentencepiece,audio,vision]==4.20.1
+        - transformers[sklearn,sentencepiece,audio,vision]==4.21.1
 
-4.20.1-pt1.11-cpu:
+4.21.1-pt1.11-cpu:
+  extra_tags:
+    - "4.21.1-pt-cpu"
+    - latest-pt-cpu
+  template:
+    template_path: templates/Dockerfile.cpu
+    base_image: ubuntu:20.04
+    env_variables:
+      - key: TEST
+        value: 1
+    conda_channels:
+      - conda-forge
+    conda_dependencies:
+      - python=3.9.13
+      - pytorch::pytorch=1.11.0=py3.9_cpu_0
+      - pip:
+        - transformers[sklearn,sentencepiece,audio,vision]==4.21.1
+
+
+########################### TENSORFLOW ###########################
+
+4.21.1-tf2.9-cuda11.2:
+  extra_tags:
+    - "4.21.1-tf-cuda"
+    - latest-tf-cuda
+  template:
+    template_path: templates/Dockerfile.cpu
+    base_image: nvidia/cuda:11.2.2-base-ubuntu20.04
+    env_variables:
+      - key: CONDA_OVERRIDE_CUDA
+        value: "11.2"
+    conda_channels:
+      - conda-forge
+    conda_dependencies:
+      - python=3.9.13
+      - nvidia::cudatoolkit=11.2
+      - tensorflow=2.9.1=*cuda112*py39*
+      - pip:
+        - transformers[sklearn,sentencepiece,audio,vision]==4.21.1
+        - tensorflow-text
+
+4.21.1-tf2.9-cpu:
   extra_tags:
     - "4.20.1-cpu"
     - latest-cpu
@@ -31,6 +72,8 @@
       - conda-forge
     conda_dependencies:
       - python=3.9.13
-      - pytorch::pytorch=1.11.0=py3.9_cpu_0
+      - tensorflow=2.9.1=*cpu*py39*
       - pip:
-        - transformers[sklearn,sentencepiece,audio,vision]==4.20.1
+        - transformers[sklearn,sentencepiece,audio,vision]==4.21.1
+        - tensorflow-text
+

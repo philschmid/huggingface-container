@@ -1,12 +1,12 @@
-FROM {{ base_image }}
+FROM nvidia/cuda:11.2.2-base-ubuntu20.04
 
 LABEL maintainer="Hugging Face"
 
 ENV DEBIAN_FRONTEND=noninteractive
-{% if env_vars %}
-{% for key, value in env_vars.items() %}
-ENV {{key}}="{{value}}"{% endfor %}
-{% endif %}
+
+
+ENV CONDA_OVERRIDE_CUDA="11.2"
+
 
 RUN apt-get update \
     && apt-get -y upgrade --only-upgrade systemd openssl cryptsetup \

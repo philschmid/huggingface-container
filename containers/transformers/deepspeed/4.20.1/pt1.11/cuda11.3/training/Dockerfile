@@ -54,5 +54,3 @@ RUN micromamba install -y -n base -f environment.yaml \
 
 RUN python3 -m pip install deepspeed --global-option="build_ext" --global-option="-j8"  --no-cache-dir
 
-
-ENTRYPOINT [ "python3" ]
