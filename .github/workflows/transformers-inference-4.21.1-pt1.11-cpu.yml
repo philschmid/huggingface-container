@@ -40,7 +40,7 @@ jobs:
     - id: build
       name: build docker image
       run: |
-        docker build -t huggingface/transformers-inference:4.20.1-pt-cpu -t huggingface/transformers-inference:latest-pt-cpu -t huggingface/transformers-inference:4.21.1-pt1.11-cpu -f containers/transformers/inference/4.21.1/pt1.11/cpu/Dockerfile containers/transformers/inference/4.21.1/pt1.11/cpu
+        docker build -t huggingface/transformers-inference:4.21.1-pt-cpu -t huggingface/transformers-inference:latest-pt-cpu -t huggingface/transformers-inference:4.21.1-pt1.11-cpu -f containers/transformers/inference/4.21.1/pt1.11/cpu/Dockerfile containers/transformers/inference/4.21.1/pt1.11/cpu
     
     - id: scan
       name: run security scans

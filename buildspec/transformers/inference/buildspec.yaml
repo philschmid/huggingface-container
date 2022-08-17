@@ -19,7 +19,7 @@
 
 4.21.1-pt1.11-cpu:
   extra_tags:
-    - "4.20.1-pt-cpu"
+    - "4.21.1-pt-cpu"
     - latest-pt-cpu
   template:
     template_path: templates/Dockerfile.cpu
