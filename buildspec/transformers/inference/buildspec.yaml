@@ -46,8 +46,8 @@
     template_path: templates/Dockerfile.cpu
     base_image: nvidia/cuda:11.2.2-base-ubuntu20.04
     env_variables:
-      - key: TEST
-        value: 1
+      - key: CONDA_OVERRIDE_CUDA
+        value: "11.2"
     conda_channels:
       - conda-forge
     conda_dependencies:

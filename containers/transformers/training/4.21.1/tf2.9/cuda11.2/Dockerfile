@@ -5,7 +5,7 @@ LABEL maintainer="Hugging Face"
 ENV DEBIAN_FRONTEND=noninteractive
 
 
-ENV TEST="1"
+ENV CONDA_OVERRIDE_CUDA="11.2"
 
 
 RUN apt-get update \
