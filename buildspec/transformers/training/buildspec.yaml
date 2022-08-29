@@ -1,6 +1,6 @@
-4.21.1-pt1.11-cuda11.5:
+4.21.2-pt1.11-cuda11.5:
   extra_tags:
-    - "4.21.1-pt-cuda"
+    - "4.21.2-pt-cuda"
     - latest-pt-cuda
   template:
     template_path: templates/Dockerfile.cpu
@@ -16,13 +16,14 @@
       - pytorch::pytorch=1.11.0=py3.9_cuda11.5_cudnn8.3.2_0
       - tensorboard
       - mpi4py=3.0 # installs cuda-aware openmpi
+      - jupyter 
       - pip:
-        - transformers[sklearn,sentencepiece,audio,vision]==4.21.1
+        - transformers[sklearn,sentencepiece,audio,vision]==4.21.2
         - datasets==2.3.2
 
-4.21.1-pt1.11-cpu:
+4.21.2-pt1.11-cpu:
   extra_tags:
-    - "4.21.1-pt-cpu"
+    - "4.21.2-pt-cpu"
     - latest-pt-cpu
   template:
     template_path: templates/Dockerfile.cpu
@@ -36,16 +37,17 @@
       - python=3.9.13
       - pytorch::pytorch=1.11.0=py3.9_cpu_0
       - tensorboard
+      - jupyter 
       - pip:
-        - transformers[sklearn,sentencepiece,audio,vision]==4.21.1
+        - transformers[sklearn,sentencepiece,audio,vision]==4.21.2
         - datasets==2.3.2
 
 
 ########################### TENSORFLOW ###########################
 
-4.21.1-tf2.9-cuda11.2:
+4.21.2-tf2.9-cuda11.2:
   extra_tags:
-    - "4.21.1-tf-cuda"
+    - "4.21.2-tf-cuda"
     - latest-tf-cuda
   template:
     template_path: templates/Dockerfile.cpu
@@ -60,13 +62,14 @@
       - nvidia::cudatoolkit=11.2
       - tensorflow=2.9.1=*cuda112*py39*
       - tensorboard
+      - jupyter 
       - pip:
-        - transformers[sklearn,sentencepiece,audio,vision]==4.21.1
-        - tensorflow-text
+        - transformers[sklearn,sentencepiece,audio,vision]==4.21.2
+        # - tensorflow-text # not compatible
 
-4.21.1-tf2.9-cpu:
+4.21.2-tf2.9-cpu:
   extra_tags:
-    - "4.21.1-cpu"
+    - "4.21.2-cpu"
     - latest-cpu
   template:
     template_path: templates/Dockerfile.cpu
@@ -80,7 +83,8 @@
       - python=3.9.13
       - tensorflow=2.9.1=*cpu*py39*
       - tensorboard
+      - jupyter 
       - pip:
-        - transformers[sklearn,sentencepiece,audio,vision]==4.21.1
-        - tensorflow-text
+        - transformers[sklearn,sentencepiece,audio,vision]==4.21.2
+        # - tensorflow-text # not compatible
 
