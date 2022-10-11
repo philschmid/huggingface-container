@@ -1,6 +1,6 @@
-4.23.0-pt1.11-cuda11.5:
+4.23.1-pt1.11-cuda11.5:
   extra_tags:
-    - "4.23.0-cuda"
+    - "4.23.1-cuda"
     - latest-cuda
   template:
     template_path: templates/Dockerfile.cpu
@@ -15,11 +15,11 @@
       - nvidia::cudatoolkit=11.5
       - pytorch::pytorch=1.11.0=py3.9_cuda11.5_cudnn8.3.2_0
       - pip:
-        - transformers[sklearn,sentencepiece,audio,vision]==4.23.0
+        - transformers[sklearn,sentencepiece,audio,vision]==4.23.1
 
-4.23.0-pt1.11-cpu:
+4.23.1-pt1.11-cpu:
   extra_tags:
-    - "4.23.0-cpu"
+    - "4.23.1-cpu"
     - latest-cpu
   template:
     template_path: templates/Dockerfile.cpu
@@ -33,14 +33,14 @@
       - python=3.9.13
       - pytorch::pytorch=1.11.0=py3.9_cpu_0
       - pip:
-        - transformers[sklearn,sentencepiece,audio,vision]==4.23.0
+        - transformers[sklearn,sentencepiece,audio,vision]==4.23.1
 
 
 ########################### TENSORFLOW ###########################
 
-4.23.0-tf2.9-cuda11.2:
+4.23.1-tf2.9-cuda11.2:
   extra_tags:
-    - "4.23.0-tf-cuda"
+    - "4.23.1-tf-cuda"
     - latest-tf-cuda
   template:
     template_path: templates/Dockerfile.cpu
@@ -55,12 +55,12 @@
       - nvidia::cudatoolkit=11.2
       - tensorflow=2.9.1=*cuda112*py39*
       - pip:
-        - transformers[sklearn,sentencepiece,audio,vision]==4.23.0
+        - transformers[sklearn,sentencepiece,audio,vision]==4.23.1
         # - tensorflow-text # not compatible
 
-4.23.0-tf2.9-cpu:
+4.23.1-tf2.9-cpu:
   extra_tags:
-    - "4.23.0-cpu"
+    - "4.23.1-cpu"
     - latest-cpu
   template:
     template_path: templates/Dockerfile.cpu
@@ -74,6 +74,6 @@
       - python=3.9.13
       - tensorflow=2.9.1=*cpu*py39*
       - pip:
-        - transformers[sklearn,sentencepiece,audio,vision]==4.23.0
+        - transformers[sklearn,sentencepiece,audio,vision]==4.23.1
         # - tensorflow-text # not compatible
 
