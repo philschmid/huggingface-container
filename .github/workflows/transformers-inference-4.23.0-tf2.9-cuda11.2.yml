@@ -1,18 +1,18 @@
-name: containers/transformers/training/4.21.2/pt1.11/cpu
+name: containers/transformers/inference/4.23.0/tf2.9/cuda11.2
 
 on:
   push:
     branches:
     - main
     paths:
-    - containers/transformers/training/4.21.2/pt1.11/cpu/*
-    - .github/workflows/transformers-training-4.21.2-pt1.11-cpu.yml
+    - containers/transformers/inference/4.23.0/tf2.9/cuda11.2/*
+    - .github/workflows/transformers-inference-4.23.0-tf2.9-cuda11.2.yml
   pull_request:
     branches:
     - main
     paths:
-    - containers/transformers/training/4.21.2/pt1.11/cpu/*
-    - .github/workflows/transformers-training-4.21.2-pt1.11-cpu.yml
+    - containers/transformers/inference/4.23.0/tf2.9/cuda11.2/*
+    - .github/workflows/transformers-inference-4.23.0-tf2.9-cuda11.2.yml
   workflow_dispatch:
 
 jobs:
@@ -40,7 +40,7 @@ jobs:
     - id: build
       name: build docker image
       run: |
-        docker build -t huggingface/transformers-training:4.21.2-pt-cpu -t huggingface/transformers-training:latest-pt-cpu -t huggingface/transformers-training:4.21.2-pt1.11-cpu -f containers/transformers/training/4.21.2/pt1.11/cpu/Dockerfile containers/transformers/training/4.21.2/pt1.11/cpu
+        docker build -t huggingface/transformers-inference:4.23.0-tf-cuda -t huggingface/transformers-inference:latest-tf-cuda -t huggingface/transformers-inference:4.23.0-tf2.9-cuda11.2 -f containers/transformers/inference/4.23.0/tf2.9/cuda11.2/Dockerfile containers/transformers/inference/4.23.0/tf2.9/cuda11.2
     
     - id: scan
       name: run security scans
@@ -50,10 +50,10 @@ jobs:
     - id: test
       name: run tests
       run: |
-        pytest -q -s --tag huggingface/transformers-training:4.21.2-pt1.11-cpu tests/test_docker_run.py
+        pytest -q -s --tag huggingface/transformers-inference:4.23.0-tf2.9-cuda11.2 tests/test_docker_run.py
 
     - id: push
       name: push image to registry
       if: github.event_name == 'push'
       run: |
-        docker push --all-tags huggingface/transformers-training
+        docker push --all-tags huggingface/transformers-inference

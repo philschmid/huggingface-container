@@ -1,6 +1,6 @@
-4.21.2-pt1.11-cuda11.5:
+4.23.0-pt1.11-cuda11.5:
   extra_tags:
-    - "4.21.2-pt-cuda"
+    - "4.23.0-pt-cuda"
     - latest-pt-cuda
   template:
     template_path: templates/Dockerfile.cpu
@@ -18,12 +18,12 @@
       - mpi4py=3.0 # installs cuda-aware openmpi
       - jupyter 
       - pip:
-        - transformers[sklearn,sentencepiece,audio,vision]==4.21.2
+        - transformers[sklearn,sentencepiece,audio,vision]==4.23.0
         - datasets==2.3.2
 
-4.21.2-pt1.11-cpu:
+4.23.0-pt1.11-cpu:
   extra_tags:
-    - "4.21.2-pt-cpu"
+    - "4.23.0-pt-cpu"
     - latest-pt-cpu
   template:
     template_path: templates/Dockerfile.cpu
@@ -39,15 +39,15 @@
       - tensorboard
       - jupyter 
       - pip:
-        - transformers[sklearn,sentencepiece,audio,vision]==4.21.2
+        - transformers[sklearn,sentencepiece,audio,vision]==4.23.0
         - datasets==2.3.2
 
 
 ########################### TENSORFLOW ###########################
 
-4.21.2-tf2.9-cuda11.2:
+4.23.0-tf2.9-cuda11.2:
   extra_tags:
-    - "4.21.2-tf-cuda"
+    - "4.23.0-tf-cuda"
     - latest-tf-cuda
   template:
     template_path: templates/Dockerfile.cpu
@@ -64,12 +64,12 @@
       - tensorboard
       - jupyter 
       - pip:
-        - transformers[sklearn,sentencepiece,audio,vision]==4.21.2
+        - transformers[sklearn,sentencepiece,audio,vision]==4.23.0
         # - tensorflow-text # not compatible
 
-4.21.2-tf2.9-cpu:
+4.23.0-tf2.9-cpu:
   extra_tags:
-    - "4.21.2-cpu"
+    - "4.23.0-cpu"
     - latest-cpu
   template:
     template_path: templates/Dockerfile.cpu
@@ -85,6 +85,6 @@
       - tensorboard
       - jupyter 
       - pip:
-        - transformers[sklearn,sentencepiece,audio,vision]==4.21.2
+        - transformers[sklearn,sentencepiece,audio,vision]==4.23.0
         # - tensorflow-text # not compatible
 

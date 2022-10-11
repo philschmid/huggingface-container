@@ -1,18 +1,18 @@
-name: containers/transformers/inference/4.21.2/tf2.9/cpu
+name: containers/transformers/training/4.23.0/pt1.11/cpu
 
 on:
   push:
     branches:
     - main
     paths:
-    - containers/transformers/inference/4.21.2/tf2.9/cpu/*
-    - .github/workflows/transformers-inference-4.21.2-tf2.9-cpu.yml
+    - containers/transformers/training/4.23.0/pt1.11/cpu/*
+    - .github/workflows/transformers-training-4.23.0-pt1.11-cpu.yml
   pull_request:
     branches:
     - main
     paths:
-    - containers/transformers/inference/4.21.2/tf2.9/cpu/*
-    - .github/workflows/transformers-inference-4.21.2-tf2.9-cpu.yml
+    - containers/transformers/training/4.23.0/pt1.11/cpu/*
+    - .github/workflows/transformers-training-4.23.0-pt1.11-cpu.yml
   workflow_dispatch:
 
 jobs:
@@ -40,7 +40,7 @@ jobs:
     - id: build
       name: build docker image
       run: |
-        docker build -t huggingface/transformers-inference:4.21.2-cpu -t huggingface/transformers-inference:latest-cpu -t huggingface/transformers-inference:4.21.2-tf2.9-cpu -f containers/transformers/inference/4.21.2/tf2.9/cpu/Dockerfile containers/transformers/inference/4.21.2/tf2.9/cpu
+        docker build -t huggingface/transformers-training:4.23.0-pt-cpu -t huggingface/transformers-training:latest-pt-cpu -t huggingface/transformers-training:4.23.0-pt1.11-cpu -f containers/transformers/training/4.23.0/pt1.11/cpu/Dockerfile containers/transformers/training/4.23.0/pt1.11/cpu
     
     - id: scan
       name: run security scans
@@ -50,10 +50,10 @@ jobs:
     - id: test
       name: run tests
       run: |
-        pytest -q -s --tag huggingface/transformers-inference:4.21.2-tf2.9-cpu tests/test_docker_run.py
+        pytest -q -s --tag huggingface/transformers-training:4.23.0-pt1.11-cpu tests/test_docker_run.py
 
     - id: push
       name: push image to registry
       if: github.event_name == 'push'
       run: |
-        docker push --all-tags huggingface/transformers-inference
+        docker push --all-tags huggingface/transformers-training
