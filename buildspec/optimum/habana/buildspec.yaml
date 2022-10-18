@@ -1,6 +1,6 @@
 4.23.1-pt1.12.0-synapse1.6.0:
   extra_tags:
-    - "4.21.1"
+    - "4.23.1"
     - latest
   template:
     template_path: templates/Dockerfile.hpu
@@ -11,3 +11,19 @@
       - datasets==2.6.1
       - optimum==1.4.0
       - optimum-habana==1.2.3 
+
+4.23.1-pt1.12.0-synapse1.6.0-deepspeed:
+  extra_tags:
+    - deepspeed-latest
+  template:
+    template_path: templates/Dockerfile.hpu
+    base_image: vault.habana.ai/gaudi-docker/1.6.1/ubuntu20.04/habanalabs/pytorch-installer-1.12.0:latest
+    pip_dependencies:
+      - tensorboard
+      - transformers[sklearn,sentencepiece,audio,vision]==4.23.1
+      - datasets==2.6.1
+      - optimum==1.4.0
+      - optimum-habana==1.2.3 
+      - git+https://github.com/HabanaAI/DeepSpeed.git@1.6.1
+      - rogue_score
+      - nltk
