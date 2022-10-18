@@ -20,4 +20,4 @@ RUN apt-get update \
     && rm -rf /var/lib/{apt,dpkg,cache,log}
 
 
-RUN python3 -m pip install tensorboard transformers[sklearn,sentencepiece,audio,vision]==4.23.1 datasets==2.6.1 optimum==1.4.0 optimum-habana==1.2.3  --no-cache-dir
+RUN python3 -m pip install tensorboard transformers[sklearn,sentencepiece,audio,vision]==4.23.1 datasets==2.6.1 evaluate==0.3.0 optimum==1.4.0 optimum-habana==1.2.3  --no-cache-dir
