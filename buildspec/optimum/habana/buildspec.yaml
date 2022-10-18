@@ -24,6 +24,6 @@
       - datasets==2.6.1
       - optimum==1.4.0
       - optimum-habana==1.2.3 
-      - git+https://github.com/HabanaAI/DeepSpeed.git@1.6.1
-      - rogue_score
+      - rouge-score
       - nltk
+      - git+https://github.com/HabanaAI/DeepSpeed.git@1.6.1
