@@ -3,7 +3,7 @@
     - "1.3.0-cuda"
     - latest-cuda
   template:
-    template_path: templates/Dockerfile.cpu
+    template_path: templates/Dockerfile.gpu
     base_image: nvidia/cuda:11.5.1-base-ubuntu20.04
     env_variables:
       - key: TEST
