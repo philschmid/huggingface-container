@@ -3,7 +3,7 @@
     - "4.23.1-cuda"
     - latest-cuda
   template:
-    template_path: templates/Dockerfile.cpu
+    template_path: templates/Dockerfile.gpu
     base_image: nvidia/cuda:11.5.1-base-ubuntu20.04
     env_variables:
       - key: TEST
@@ -43,7 +43,7 @@
     - "4.23.1-tf-cuda"
     - latest-tf-cuda
   template:
-    template_path: templates/Dockerfile.cpu
+    template_path: templates/Dockerfile.gpu
     base_image: nvidia/cuda:11.2.2-base-ubuntu20.04
     env_variables:
       - key: CONDA_OVERRIDE_CUDA

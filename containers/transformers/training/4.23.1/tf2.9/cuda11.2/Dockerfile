@@ -34,6 +34,8 @@ RUN apt-get update \
 # install micromamba
 ENV MAMBA_ROOT_PREFIX=/opt/conda
 ENV PATH=/opt/conda/bin:$PATH
+ENV LD_LIBRARY_PATH="/opt/conda/lib:${LD_LIBRARY_PATH}"
+
 RUN curl -L https://micromamba.snakepit.net/api/micromamba/linux-64/latest | tar -xj "bin/micromamba" \
     && touch /root/.bashrc \
     && ./bin/micromamba shell init -s bash -p /opt/conda  \
