@@ -86,6 +86,13 @@ The last step is to create a PR into the `main` branch this will trigger you gen
 * [cudatoolkit](https://anaconda.org/nvidia/cuda-toolkit/files)
 * [Wildcard example for installing](https://github.com/tensorflow/tensorflow/issues/52988#issuecomment-1161829152)
 
+**search for conda packages**
+
+```bash
+conda search -c pytorch pytorch=1.13.0=py3.9_cuda11.6*
+```
+_^works not on m1_
+
 
 ## Helpful resources
 * [Blog](https://towardsdatascience.com/managing-cuda-dependencies-with-conda-89c5d817e7e1)
