@@ -16,6 +16,7 @@ RUN apt-get update \
     git \
     git-lfs \
     tar \
+    gcc \
     # audio
     libsndfile1-dev \
     ffmpeg \
