@@ -1,12 +1,12 @@
-FROM {{ base_image }}
+FROM nvidia/cuda:11.2.2-base-ubuntu20.04
 
 LABEL maintainer="Hugging Face"
 
 ENV DEBIAN_FRONTEND=noninteractive
-{% if env_vars %}
-{% for key, value in env_vars.items() %}
-ENV {{key}}="{{value}}"{% endfor %}
-{% endif %}
+
+
+ENV CONDA_OVERRIDE_CUDA="11.2"
+
 
 RUN apt-get update \
     && apt-get -y upgrade --only-upgrade systemd openssl cryptsetup \
@@ -36,6 +36,8 @@ RUN apt-get update \
 # install micromamba
 ENV MAMBA_ROOT_PREFIX=/opt/conda
 ENV PATH=/opt/conda/bin:$PATH
+ENV LD_LIBRARY_PATH="/opt/conda/lib:${LD_LIBRARY_PATH}"
+
 RUN curl -L https://micromamba.snakepit.net/api/micromamba/linux-64/latest | tar -xj "bin/micromamba" \
     && touch /root/.bashrc \
     && ./bin/micromamba shell init -s bash -p /opt/conda  \

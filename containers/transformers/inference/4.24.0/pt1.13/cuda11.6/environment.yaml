@@ -1,0 +1,9 @@
+name: base
+channels:
+- conda-forge
+dependencies:
+- python=3.9.13
+- nvidia::cudatoolkit=11.6
+- pytorch::pytorch=1.13.0=py3.9_cuda11.6*
+- pip:
+  - transformers[sklearn,sentencepiece,audio,vision]==4.24.0
